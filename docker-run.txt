@@ -1,0 +1,123 @@
+========== Извлечение образов ==========
+Выполняется вытягивание отсутствующих образов Docker. Чтобы отменить скачивание, закройте окно командной строки. Чтобы отключить автоматическое вытягивание образов, выберите "Сервис" > "Параметры" > "Инструменты контейнера".
+docker pull mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim
+docker pull mcr.microsoft.com/dotnet/core/sdk:3.1-buster
+Вытягивание из Docker завершено
+========== Подготовка контейнеров ==========
+Подготовка контейнеров Docker...
+docker-compose  -f "C:\Users\vlape\source\repos\WebFrontEnd\docker-compose.yml" -f "C:\Users\vlape\source\repos\WebFrontEnd\docker-compose.override.yml" -f "C:\Users\vlape\source\repos\WebFrontEnd\obj\Docker\docker-compose.vs.debug.g.yml" -p dockercompose751187152415958688 --no-ansi config
+services:
+  mywebapi:
+    build:
+      context: C:\Users\vlape\source\repos\WebFrontEnd
+      dockerfile: MyWebApi/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: MyWebApi
+      target: base
+    container_name: MyWebApi
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: ''
+    image: mywebapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/netcoreapp3.1/MyWebApi.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - published: 5010
+      target: 90
+    - target: 90
+    tty: true
+    volumes:
+    - C:\Users\vlape\source\repos\WebFrontEnd\MyWebApi:/app:rw
+    - C:\Users\vlape\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\vlape\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\vlape\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Users\vlape\.nuget\packages:/root/.nuget/packages:ro
+    - C:\Users\vlape\source\repos\WebFrontEnd:/src:rw
+  webfrontend:
+    build:
+      context: C:\Users\vlape\source\repos\WebFrontEnd
+      dockerfile: WebFrontEnd/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: WebFrontEnd
+      target: base
+    container_name: WebFrontEnd
+    entrypoint: tail -f /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DOTNET_USE_POLLING_FILE_WATCHER: '1'
+      NUGET_FALLBACK_PACKAGES: ''
+    image: webfrontend:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /root/.nuget/packages  "/app/bin/Debug/netcoreapp3.1/WebFrontEnd.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    ports:
+    - published: 5008
+      target: 80
+    - target: 80
+    tty: true
+    volumes:
+    - C:\Users\vlape\source\repos\WebFrontEnd\WebFrontEnd:/app:rw
+    - C:\Users\vlape\vsdbg\vs2017u5:/remote_debugger:rw
+    - C:\Users\vlape\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\vlape\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
+    - C:\Users\vlape\.nuget\packages:/root/.nuget/packages:ro
+    - C:\Users\vlape\source\repos\WebFrontEnd:/src:rw
+version: '3.4'
+docker-compose  -f "C:\Users\vlape\source\repos\WebFrontEnd\docker-compose.yml" -f "C:\Users\vlape\source\repos\WebFrontEnd\docker-compose.override.yml" -f "C:\Users\vlape\source\repos\WebFrontEnd\obj\Docker\docker-compose.vs.debug.g.yml" -p dockercompose751187152415958688 --no-ansi build 
+Building mywebapi
+Step 1/5 : FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+ ---> bdca989bc8d3
+Step 2/5 : WORKDIR /app
+ ---> Using cache
+ ---> c6591b5aa995
+Step 3/5 : EXPOSE 90
+ ---> Using cache
+ ---> 91f08ae78102
+Step 4/5 : LABEL com.microsoft.created-by=visual-studio
+ ---> Using cache
+ ---> b0b9e558e57f
+Step 5/5 : LABEL com.microsoft.visual-studio.project-name=MyWebApi
+ ---> Using cache
+ ---> d4d4ca91a7c1
+Successfully built d4d4ca91a7c1
+Successfully tagged mywebapi:dev
+Building webfrontend
+Step 1/5 : FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+ ---> bdca989bc8d3
+Step 2/5 : WORKDIR /app
+ ---> Using cache
+ ---> c6591b5aa995
+Step 3/5 : EXPOSE 80
+ ---> Using cache
+ ---> f2e0cc4e48bc
+Step 4/5 : LABEL com.microsoft.created-by=visual-studio
+ ---> Using cache
+ ---> 6c87bc1d3cb4
+Step 5/5 : LABEL com.microsoft.visual-studio.project-name=WebFrontEnd
+ ---> Using cache
+ ---> 5d26e5fd44d4
+Successfully built 5d26e5fd44d4
+Successfully tagged webfrontend:dev
+docker ps --filter "status=running" --format {{.ID}};{{.Names}}
+762002a8e00e;mywebapi
+docker-compose  -f "C:\Users\vlape\source\repos\WebFrontEnd\docker-compose.yml" -f "C:\Users\vlape\source\repos\WebFrontEnd\docker-compose.override.yml" -f "C:\Users\vlape\source\repos\WebFrontEnd\obj\Docker\docker-compose.vs.debug.g.yml" -p dockercompose751187152415958688 --no-ansi up -d --no-build --force-recreate --remove-orphans
+Creating network "dockercompose751187152415958688_default" with the default driver
+Creating WebFrontEnd ... 
+Creating MyWebApi    ... 
+Creating MyWebApi    ... done
+Creating WebFrontEnd ... done
+
+docker-compose  -f "C:\Users\vlape\source\repos\WebFrontEnd\docker-compose.yml" -f "C:\Users\vlape\source\repos\WebFrontEnd\docker-compose.override.yml" -p dockercompose751187152415958688 --no-ansi up -d --no-build --force-recreate --remove-orphans

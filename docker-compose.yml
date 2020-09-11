@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+  webfrontend:
+    image: ${DOCKER_REGISTRY-}webfrontend  
+    ports: ["5008:80"]
+    depends_on: 
+      - mywebapi
+    build:
+      context: .
+      dockerfile: WebFrontEnd/Dockerfile
+
+  mywebapi:
+    image: ${DOCKER_REGISTRY-}mywebapi    
+    ports: ["5010:80"]
+    depends_on: 
+      - sqlserverService
+    build:
+      context: .
+      dockerfile: MyWebApi/Dockerfile
+
+#  db:
+#    image: mysql
+#    ports: ["8083:3306"]
+#    restart: always   
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_DATABASE: new_base
+    
+  sqlserverService:  
+    image: mcr.microsoft.com/mssql/server:latest  
+  #  hostname: 'sqlserver'  
+    environment:  
+      ACCEPT_EULA: Y  
+      SA_PASSWORD: "BigPassw0rd"      
+    ports: ["1433:1433"]  
+ #   expose:  
+#      - 1433  
