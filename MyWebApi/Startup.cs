@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -28,14 +29,39 @@ namespace MyWebApi
         {
             services.AddDbContext<ProductsDBContext>(
            options => options.UseSqlServer(Configuration.GetConnectionString("SqlConnection")));
+
+            services.AddMassTransit(x =>
+            {
+                x.AddConsumer<ProductConsumer>();
+                x.UsingRabbitMq((context,cfg)=> {
+                    cfg.Host("rabbitmq://rab01");
+                    cfg.ReceiveEndpoint("event-listener", e =>
+                    {
+                        e.ConfigureConsumer<ProductConsumer>(context);
+                    });
+
+                });
+               
+
+               
+            });
+
+            services.AddMassTransitHostedService();
+
             services.AddControllers();
             services.AddSwaggerDocument();
+
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            Console.WriteLine($"Service MyWebApi getting started at: {DateTime.Now}");
+            
+            Console.WriteLine($"Connection string is {Configuration.GetConnectionString("SqlConnection")}");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -55,41 +81,28 @@ namespace MyWebApi
                 endpoints.MapControllers();
             });
 
-
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            try
             {
-                var context = serviceScope.ServiceProvider.GetService<ProductsDBContext>();
-                context.Database.Migrate();
-            }
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                    var context = serviceScope.ServiceProvider.GetService<ProductsDBContext>();
+                    context.Database.Migrate();
+                }
 
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"MyWebApi migration not working");
+                Console.Write(e.Message);
+                Console.Write(e.InnerException);
+                Console.Write(e.StackTrace);
+            }
             Console.WriteLine($"Service MyWebApi started at: {DateTime.Now}");
 
         }
 
         
-            //private void CreateDb()
-            //{
-            //    string cs = @"server=db;userid=root;password=root;database=new_base";
-
-            //    using var con = new MySqlConnection(cs);
-            //    con.Open();
-
-            //    using var cmd = new MySqlCommand();
-            //    cmd.Connection = con;
-
-            //    cmd.CommandText = "DROP TABLE IF EXISTS weather";
-            //    cmd.ExecuteNonQuery();
-
-            //    cmd.CommandText = @"CREATE TABLE weather(id INTEGER PRIMARY KEY AUTO_INCREMENT,
-            //        weatherdesc TEXT)";
-            //    cmd.ExecuteNonQuery();
-
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    cmd.CommandText = $"INSERT INTO weather(weatherdesc) VALUES({i})";
-            //    cmd.ExecuteNonQuery();
-            //}
-            //}
+            
        
     }
 }

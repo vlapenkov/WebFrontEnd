@@ -4,20 +4,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace MyWebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
         /// <summary>The products database context</summary>  
         private readonly ProductsDBContext _productsDbContext;
+        private readonly ILogger<ProductsController> _logger;
 
-        public ProductsController(ProductsDBContext productsDbContext)
+        public ProductsController(ProductsDBContext productsDbContext, ILogger<ProductsController> logger)
         {
             _productsDbContext = productsDbContext;
+            _logger = logger;
         }
 
         /// <summary>Gets the product.</summary>  
@@ -26,8 +30,32 @@ namespace MyWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
         {
-            Console.WriteLine($"MachineName {Environment.MachineName}");
-            return Ok(await _productsDbContext.Products.ToListAsync());
+            _logger.LogInformation($"MachineName {Environment.MachineName}");
+
+            var products = await _productsDbContext.Products.ToListAsync();
+            var firstProduct = products.First();
+
+            _logger.LogInformation("First product with {id}  is {@Position}", firstProduct.Id, firstProduct);
+
+            return Ok(products);
+        }
+
+
+        [HttpGet]
+        public async Task<string> GetProduct2()
+        {
+            _logger.LogInformation(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            var sqlname = Environment.GetEnvironmentVariable("sqlname")?? "sqlserver";
+
+            var connectionString = $"Server={sqlname};Database=Products;User Id=sa;Password=BigPassw0rd";
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                return connection.ServerVersion;
+
+            }
+            return ""; 
         }
 
         /// <summary>Creates the specified product.</summary>  

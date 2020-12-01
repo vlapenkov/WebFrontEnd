@@ -9,30 +9,76 @@ services:
     build:
       context: .
       dockerfile: WebFrontEnd/Dockerfile
-
   mywebapi:
     image: ${DOCKER_REGISTRY-}mywebapi    
     ports: ["5010:80"]
     depends_on: 
-      - sqlserverService
+      - sqlserver
     build:
       context: .
-      dockerfile: MyWebApi/Dockerfile
+      dockerfile: MyWebApi/Dockerfile    
 
-#  db:
-#    image: mysql
-#    ports: ["8083:3306"]
-#    restart: always   
-#    environment:
-#      MYSQL_ROOT_PASSWORD: root
-#      MYSQL_DATABASE: new_base
-    
-  sqlserverService:  
-    image: mcr.microsoft.com/mssql/server:latest  
-  #  hostname: 'sqlserver'  
+  sqlserver:  
+    image: mcr.microsoft.com/mssql/server:latest   
     environment:  
       ACCEPT_EULA: Y  
       SA_PASSWORD: "BigPassw0rd"      
     ports: ["1433:1433"]  
- #   expose:  
-#      - 1433  
+    volumes:
+      - datasql:/var/opt/mssql
+
+  postgres:  
+    image: postgres 
+    environment:  
+      POSTGRES_PASSWORD: BigPassw0rd      
+    ports: 
+      - 5432:5432
+    volumes:
+      - datapostgre:/var/lib/postgresql/data        
+
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: es01
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200   
+ 
+  kib01:
+    image: docker.elastic.co/kibana/kibana:7.10.0
+    container_name: kib01
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://es01:9200
+      ELASTICSEARCH_HOSTS: http://es01:9200
+   
+  rab01:
+    image: "rabbitmq:3-management"
+    container_name: rab01
+    environment:
+      - RABBITMQ_ERLANG_COOKIE='secret_cookie'    
+    hostname: rab01    
+    ports:
+      - "15672:15672"
+      - "5672:5672" 
+    volumes:
+      - datarab:/var/lib/rabbitmq
+   
+
+volumes:
+  data01:
+    driver: local
+  datasql:
+    driver: local
+  datapostgre:
+    driver: local
+  datarab:
+    driver: local

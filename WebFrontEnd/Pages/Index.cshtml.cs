@@ -25,11 +25,15 @@ namespace WebFrontEnd.Pages
             {
                 // Call *mywebapi*, and display its response in the page
                 var request = new System.Net.Http.HttpRequestMessage();
-                // request.RequestUri = new Uri("http://mywebapi/WeatherForecast"); // ASP.NET 3 (VS 2019 only)
+                var webapi = Environment.GetEnvironmentVariable("webapi");
 
-                request.RequestUri = new Uri("http://mywebapi/api/Products"); // ASP.NET 3 
+                var url = String.Format("http://{0}/api/Products/GetProduct", webapi ?? "mywebapi");
+                Console.WriteLine("Url is: "+url);
+                request.RequestUri = new Uri(url); // ASP.NET 3 
                 var response = await client.SendAsync(request);
-                ViewData["Message"] += " and " + await response.Content.ReadAsStringAsync();
+                var result= await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Result is: " + result);
+                ViewData["Message"] += " and " + result;
             }
         }
     }

@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  webfrontend:
+    image: webfrontend:latest   
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports: 
+      - "5081:80"
+    depends_on: 
+      - mywebapi
+    deploy:
+      replicas: 1
+      
+  mywebapi:
+    image: mywebapi:latest   
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"    
+    ports: 
+      - "5011:80"
+    depends_on: 
+      - sqlserver
+      
+  sqlserver:  
+    image: mcr.microsoft.com/mssql/server:latest  
+    environment:  
+      ACCEPT_EULA: "Y"  
+      SA_PASSWORD: "BigPassw0rd"      
+    ports: 
+      - "1433:1433"  
+    deploy:
+      replicas: 1
