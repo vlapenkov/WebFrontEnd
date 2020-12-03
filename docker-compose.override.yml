@@ -4,18 +4,18 @@ services:
   webfrontend:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
-
+#    ports:
+#      - "80"
+#
   mywebapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
-
+#    ports:
+#      - "80"
+#
   webapi2:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
+#    ports:
+#      - "80"
 

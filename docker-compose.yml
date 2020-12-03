@@ -14,13 +14,15 @@ services:
     ports: ["5010:80"]
     depends_on: 
       - sqlserver
+      - es01
     build:
       context: .
       dockerfile: MyWebApi/Dockerfile    
 
   webapi2:
     image: ${DOCKER_REGISTRY-}mywebapi2    
-    ports: ["5011:80"]
+    ports: 
+      - 5011:80
     depends_on: 
       - postgres
     build:
