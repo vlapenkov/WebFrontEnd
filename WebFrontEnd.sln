@@ -14,7 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{B5539AEB-CDAA-4580-95B5-C3935645AFDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{B5539AEB-CDAA-4580-95B5-C3935645AFDF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi2.Web", "WebApi2\WebApi2.Web.csproj", "{8C5D8C6E-D0A0-401B-B13F-6ED320FC9C0B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{B6517EE4-6741-41FC-84CC-D0672055E12D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi2.Contracts", "WebApi2.Contracts\WebApi2.Contracts.csproj", "{856E5ABD-5BD2-4725-8770-C7F9B29D9CFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,9 +44,20 @@ Global
 		{B5539AEB-CDAA-4580-95B5-C3935645AFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5539AEB-CDAA-4580-95B5-C3935645AFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5539AEB-CDAA-4580-95B5-C3935645AFDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C5D8C6E-D0A0-401B-B13F-6ED320FC9C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C5D8C6E-D0A0-401B-B13F-6ED320FC9C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C5D8C6E-D0A0-401B-B13F-6ED320FC9C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C5D8C6E-D0A0-401B-B13F-6ED320FC9C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{856E5ABD-5BD2-4725-8770-C7F9B29D9CFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{856E5ABD-5BD2-4725-8770-C7F9B29D9CFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{856E5ABD-5BD2-4725-8770-C7F9B29D9CFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{856E5ABD-5BD2-4725-8770-C7F9B29D9CFA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B6517EE4-6741-41FC-84CC-D0672055E12D} = {20BD09BF-2787-4A92-8C78-EB305E8F9F58}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7F6E2793-EE47-4C0E-A3E9-D25D4D1742E8}

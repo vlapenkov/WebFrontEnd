@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApi2.Contracts.Intrerfaces;
+using Refit;
 
 namespace WebFrontEnd
 {
@@ -23,6 +25,8 @@ namespace WebFrontEnd
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            var baseAddress = new Uri(Configuration["Services:WebApi2"]);
+            services.AddRefitClient<IProductService>().ConfigureHttpClient(c => c.BaseAddress = baseAddress);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

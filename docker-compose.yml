@@ -18,6 +18,15 @@ services:
       context: .
       dockerfile: MyWebApi/Dockerfile    
 
+  webapi2:
+    image: ${DOCKER_REGISTRY-}mywebapi2    
+    ports: ["5011:80"]
+    depends_on: 
+      - postgres
+    build:
+      context: .
+      dockerfile: WebApi2/Dockerfile     
+
   sqlserver:  
     image: mcr.microsoft.com/mssql/server:latest   
     environment:  
@@ -27,14 +36,39 @@ services:
     volumes:
       - datasql:/var/opt/mssql
 
+  #postgres:  
+  #  build:
+  #    context: .
+  #    dockerfile: PostgreTest/Dockerfile
+  #  environment:  
+  #    POSTGRES_PASSWORD: BigPassw0rd
+  #    POSTGRES_HOST_AUTH_METHOD: trust
+  #  ports: 
+  #    - 5433:5432
+  #  volumes:
+  #    - datapostgre:/var/lib/postgresql/data
+
   postgres:  
     image: postgres 
+    container_name: postgres01
+  #  command: postgres -c config_file=/etc/postgresql/postgresql.conf
     environment:  
-      POSTGRES_PASSWORD: BigPassw0rd      
+      POSTGRES_PASSWORD: BigPassw0rd
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports: 
       - 5432:5432
     volumes:
-      - datapostgre:/var/lib/postgresql/data        
+      - datapostgre:/var/lib/postgresql/data    
+      
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    ports:
+      - 3333:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin
+      PGADMIN_DEFAULT_PASSWORD: admin      
 
   es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0

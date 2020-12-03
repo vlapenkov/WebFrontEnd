@@ -9,10 +9,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="5.1.67" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj" />  
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\WebApi2.Contracts\WebApi2.Contracts.csproj" />  
   </ItemGroup>
 
 </Project>
