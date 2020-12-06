@@ -28,6 +28,27 @@ namespace WebApi2.Web
             services.AddDbContext<ProductsDbContext>(options =>
            options.UseNpgsql(Configuration.GetConnectionString("ProductsDatabase")));
 
+           
+
+            services.AddAuthentication("Bearer")
+              .AddJwtBearer("Bearer", options =>
+              {
+                  options.Authority = Configuration["Services:IS4"];// "http://192.168.0.106:5100";
+                  options.RequireHttpsMetadata = false;
+                  options.Audience = "Api1";
+              });
+            services.AddAuthorization(
+                options =>
+                {
+                    options.AddPolicy("DefaultPolicy", policy =>
+                    {
+                        policy.AuthenticationSchemes.Add("Bearer");
+                        policy.RequireAuthenticatedUser();
+                        // policy.Requirements.Add(new MinimumAgeRequirement());
+                    });
+                }
+                );
+
             services.AddControllers();
             services.AddSwaggerDocument();
         }

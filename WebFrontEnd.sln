@@ -20,7 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi2.Web", "WebApi2\WebA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{B6517EE4-6741-41FC-84CC-D0672055E12D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi2.Contracts", "WebApi2.Contracts\WebApi2.Contracts.csproj", "{856E5ABD-5BD2-4725-8770-C7F9B29D9CFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi2.Contracts", "WebApi2.Contracts\WebApi2.Contracts.csproj", "{856E5ABD-5BD2-4725-8770-C7F9B29D9CFA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreIdentityServer", "AspNetCoreIdentityServer\AspNetCoreIdentityServer.csproj", "{B0876041-1440-4E75-8555-0CEA439712AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{856E5ABD-5BD2-4725-8770-C7F9B29D9CFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{856E5ABD-5BD2-4725-8770-C7F9B29D9CFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{856E5ABD-5BD2-4725-8770-C7F9B29D9CFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0876041-1440-4E75-8555-0CEA439712AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0876041-1440-4E75-8555-0CEA439712AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0876041-1440-4E75-8555-0CEA439712AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0876041-1440-4E75-8555-0CEA439712AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

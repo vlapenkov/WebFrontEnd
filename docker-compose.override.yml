@@ -19,3 +19,8 @@ services:
 #    ports:
 #      - "80"
 
+  is4:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+ #    ports:
+ #     - "5100" 

@@ -6,6 +6,7 @@ services:
     ports: ["5008:80"]
     depends_on: 
       - mywebapi
+      - is4
     build:
       context: .
       dockerfile: WebFrontEnd/Dockerfile
@@ -13,7 +14,7 @@ services:
     image: ${DOCKER_REGISTRY-}mywebapi    
     ports: ["5010:80"]
     depends_on: 
-      - sqlserver
+     # - sqlserver
       - es01
     build:
       context: .
@@ -29,14 +30,25 @@ services:
       context: .
       dockerfile: WebApi2/Dockerfile     
 
-  sqlserver:  
-    image: mcr.microsoft.com/mssql/server:latest   
-    environment:  
-      ACCEPT_EULA: Y  
-      SA_PASSWORD: "BigPassw0rd"      
-    ports: ["1433:1433"]  
-    volumes:
-      - datasql:/var/opt/mssql
+  is4:
+    image: ${DOCKER_REGISTRY-}is4    
+    ports: 
+      - 5100:80
+    depends_on: 
+      - postgres
+    build:
+      context: .
+      dockerfile: AspNetCoreIdentityServer/Dockerfile     
+        
+
+  #sqlserver:  
+  #  image: mcr.microsoft.com/mssql/server:latest   
+  #  environment:  
+  #    ACCEPT_EULA: Y  
+  #    SA_PASSWORD: "BigPassw0rd"      
+  #  ports: ["1433:1433"]  
+  #  volumes:
+  #    - datasql:/var/opt/mssql
 
   #postgres:  
   #  build:
@@ -62,15 +74,7 @@ services:
     volumes:
       - datapostgre:/var/lib/postgresql/data    
       
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4
-    ports:
-      - 3333:80
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin
-      PGADMIN_DEFAULT_PASSWORD: admin      
+        
 
   es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
