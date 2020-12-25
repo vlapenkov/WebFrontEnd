@@ -1,10 +1,8 @@
 ﻿Пример работы с Docker
 3 контейнера
 WebFront
-WebApi
-SqlServer
-PostGresql
-Webapi2
+MyWebApi+SqlServer
+Webapi2.Web+PostGresql
 Identity server +  postgre + iodc
 Refit
 
