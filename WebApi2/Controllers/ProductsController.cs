@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,7 @@ namespace WebApi2.Web
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(Policy ="DefaultPolicy")]
     public class ProductsController : ControllerBase, IProductService
     {
         /// <summary>The products database context</summary>  
@@ -31,6 +34,7 @@ namespace WebApi2.Web
         [HttpGet]
         public async Task<IEnumerable<ProductDto>> GetProducts()
         {
+            var token =await HttpContext.GetTokenAsync("access_token");
             _logger.LogInformation($"MachineName {Environment.MachineName}");
 
             var products = await _productsDbContext.Products.Select(p=>new ProductDto {Id=p.Id,Name=p.Name }).OrderBy(p=>p.Name).ToListAsync();

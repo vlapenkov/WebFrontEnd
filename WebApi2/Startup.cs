@@ -33,7 +33,7 @@ namespace WebApi2.Web
             services.AddAuthentication("Bearer")
               .AddJwtBearer("Bearer", options =>
               {
-                  options.Authority = Configuration["Services:IS4"];// "http://192.168.0.106:5100";
+                  options.Authority = Configuration["Services:IS4"];// "http://local_host:5100";
                   options.RequireHttpsMetadata = false;
                   options.Audience = "Api1";
               });

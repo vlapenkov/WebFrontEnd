@@ -50,6 +50,9 @@ namespace WebFrontEnd
            ;
             services.AddHttpContextAccessor();
 
+            services.AddTransient<MyAccessTokenHandler>();
+
+
             #region identity
             services.AddAuthentication(options =>
             {
@@ -87,7 +90,10 @@ namespace WebFrontEnd
             services.AddControllersWithViews();
 
             var baseAddress = new Uri(Configuration["Services:WebApi2"]);
-            services.AddRefitClient<IProductService>().ConfigureHttpClient(c => c.BaseAddress = baseAddress);
+            services.AddRefitClient<IProductService>()
+                .ConfigureHttpClient(c => c.BaseAddress = baseAddress)
+                .AddHttpMessageHandler<MyAccessTokenHandler>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
