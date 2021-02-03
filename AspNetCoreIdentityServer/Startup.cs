@@ -26,6 +26,12 @@ namespace AspNetCoreIdentityServer
 
         public IConfiguration Configuration { get; }
 
+        private void CheckSameSite(HttpContext httpContext, CookieOptions options)
+        {
+            if (!httpContext.Request.IsHttps && options.SameSite == SameSiteMode.None) options.SameSite = SameSiteMode.Unspecified;
+            
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -60,13 +66,16 @@ namespace AspNetCoreIdentityServer
                 .AddInMemoryClients(Config.GetClients(Configuration))
                 .AddAspNetIdentity<ApplicationUser>();
 
-            // нужно для нормальной работы OpenIdCоnnect в Chrome и других браузерах без http
-
-            //services.ConfigureExternalCookie(options =>
-            //{
-            //    options.Cookie.IsEssential = true;
-            //    options.Cookie.SameSite = SameSiteMode.Unspecified; //SameSiteMode.Unspecified in .NET Core 3.1
-            //    });
+            // нужен для нормальной работы OpenIdConnect в Chrome 8 без https.
+            //Также нужен код в IS4 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
+                options.OnAppendCookie = cookieContext =>
+                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+                options.OnDeleteCookie = cookieContext =>
+                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+            });
 
             services.ConfigureApplicationCookie(options =>
             {

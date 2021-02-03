@@ -22,14 +22,7 @@ namespace WebFrontEnd
 
         private void CheckSameSite(HttpContext httpContext, CookieOptions options)
         {
-            if (options.SameSite == SameSiteMode.None)
-            {
-                //var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
-                //if (MyUserAgentDetectionLib.DisallowsSameSiteNone(userAgent))
-                {
-                    options.SameSite = SameSiteMode.Unspecified;
-                }
-            }
+            if (!httpContext.Request.IsHttps && options.SameSite == SameSiteMode.None) options.SameSite = SameSiteMode.Unspecified;
         }
         public IConfiguration Configuration { get; }
 
